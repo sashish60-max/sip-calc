@@ -51,6 +51,12 @@
     <div class="input-group">
         <label>Target Corpus (₹ Cr)</label>
         <input type="number" id="target" value="10">
+
+<div class="input-group">
+    <label>Annual Inflation (%)</label>
+    <input type="number" id="inflation" value="6">
+</div>
+
     </div>
 
     <button onclick="calculateWealth()">Calculate & Plan</button>
@@ -59,6 +65,24 @@
         <div id="corpusText"></div>
         <div id="fiText" style="margin-top:10px; font-size: 14px; color: #636e72;"></div>
     </div>
+        // ... (existing math logic) ...
+
+        // 3. UI Update (Updated for Inflation)
+        const yearsResult = (months / 12).toFixed(1);
+        const inflationRate = (parseFloat(document.getElementById('inflation').value) || 0) / 100;
+        
+        // Calculate Present Value (Today's Terms)
+        const todayValue = total / Math.pow((1 + inflationRate), (months / 12));
+
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('corpusText').innerHTML = `
+            Projected Wealth: <span class="highlight">₹${(total / 10000000).toFixed(2)} Cr</span>
+            <div style="font-size: 14px; color: #e67e22; margin-top: 5px;">
+                Value in today's terms: <b>₹${(todayValue / 10000000).toFixed(2)} Cr</b>
+            </div>
+        `;
+        document.getElementById('fiText').innerText = `Target reached in ${yearsResult} years.`;
+
 
     <div class="chart-container">
         <canvas id="myWealthChart"></canvas>
@@ -152,6 +176,18 @@ function calculateWealth() {
         alert("Something went wrong. Please check your inputs.");
     }
 }
+        // 5. Save Data to Google Sheets
+        saveData({
+            timestamp: new Date().toLocaleString(),
+            initial, 
+            sip, 
+            stepup: stepup * 100, 
+            returns: returns * 100, 
+            target: targetCr / 10000000, 
+            years: yearsResult,
+            today_value: (todayValue / 10000000).toFixed(2) // New Column
+        });
+
 </script>
 </body>
 </html>
