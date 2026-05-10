@@ -4,21 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FI Freedom Calculator</title>
-    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --primary: #27ae60; --dark: #2c3e50; --bg: #f4f7f6; }
-        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); padding: 15px; display: flex; justify-content: center; color: var(--dark); }
+        :root { --primary: #27ae60; --dark: #2c3e50; --bg: #f4f7f6; --accent: #e67e22; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); padding: 15px; display: flex; justify-content: center; color: var(--dark); }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 450px; }
-        h2 { text-align: center; margin-top: 0; font-weight: 700; color: var(--dark); }
+        h2 { text-align: center; margin-top: 0; font-weight: 700; }
         .input-group { margin-bottom: 15px; }
         label { display: block; font-size: 13px; margin-bottom: 5px; color: #7f8c8d; font-weight: 600; }
-        input { width: 100%; padding: 12px; border: 1px solid #dfe6e9; border-radius: 10px; box-sizing: border-box; font-size: 16px; outline: none; transition: border 0.3s; }
+        input { width: 100%; padding: 12px; border: 1px solid #dfe6e9; border-radius: 10px; box-sizing: border-box; font-size: 16px; outline: none; }
         input:focus { border-color: var(--primary); }
-        button { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: opacity 0.3s; }
-        button:active { opacity: 0.8; }
-        #result { margin-top: 25px; padding: 20px; border-radius: 12px; background: #e8f5e9; display: none; text-align: center; }
+        button { width: 100%; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 10px; font-size: 18px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        #result { margin-top: 25px; padding: 20px; border-radius: 12px; background: #fdf2e9; display: none; text-align: center; border: 1px solid #fadbd8; }
         .highlight { color: var(--primary); font-weight: 800; font-size: 22px; display: block; margin-top: 5px; }
+        .inflation-text { font-size: 14px; color: var(--accent); margin-top: 8px; font-weight: 600; }
         .chart-container { margin-top: 30px; height: 280px; width: 100%; }
         .footer-note { font-size: 10px; color: #b2bec3; text-align: center; margin-top: 20px; }
     </style>
@@ -28,76 +27,30 @@
 <div class="card">
     <h2>FI Freedom Calc</h2>
     
-    <div class="input-group">
-        <label>Initial Investment (₹)</label>
-        <input type="number" id="initial" placeholder="e.g. 500000" value="0">
-    </div>
-    
-    <div class="input-group">
-        <label>Monthly SIP (₹)</label>
-        <input type="number" id="sip" value="50000">
-    </div>
-    
-    <div class="input-group">
-        <label>Annual Step-Up (%)</label>
-        <input type="number" id="stepup" value="10">
-    </div>
-    
-    <div class="input-group">
-        <label>Expected Returns (% p.a.)</label>
-        <input type="number" id="returns" value="12">
-    </div>
-    
-    <div class="input-group">
-        <label>Target Corpus (₹ Cr)</label>
-        <input type="number" id="target" value="10">
-
-<div class="input-group">
-    <label>Annual Inflation (%)</label>
-    <input type="number" id="inflation" value="6">
-</div>
-
-    </div>
+    <div class="input-group"><label>Initial Investment (₹)</label><input type="number" id="initial" value="0"></div>
+    <div class="input-group"><label>Monthly SIP (₹)</label><input type="number" id="sip" value="50000"></div>
+    <div class="input-group"><label>Annual Step-Up (%)</label><input type="number" id="stepup" value="10"></div>
+    <div class="input-group"><label>Expected Returns (%)</label><input type="number" id="returns" value="12"></div>
+    <div class="input-group"><label>Target Corpus (₹ Cr)</label><input type="number" id="target" value="10"></div>
+    <div class="input-group"><label>Annual Inflation (%)</label><input type="number" id="inflation" value="6"></div>
 
     <button onclick="calculateWealth()">Calculate & Plan</button>
 
     <div id="result">
         <div id="corpusText"></div>
-        <div id="fiText" style="margin-top:10px; font-size: 14px; color: #636e72;"></div>
-    </div>
-        // ... (existing math logic) ...
-
-        // 3. UI Update (Updated for Inflation)
-        const yearsResult = (months / 12).toFixed(1);
-        const inflationRate = (parseFloat(document.getElementById('inflation').value) || 0) / 100;
-        
-        // Calculate Present Value (Today's Terms)
-        const todayValue = total / Math.pow((1 + inflationRate), (months / 12));
-
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('corpusText').innerHTML = `
-            Projected Wealth: <span class="highlight">₹${(total / 10000000).toFixed(2)} Cr</span>
-            <div style="font-size: 14px; color: #e67e22; margin-top: 5px;">
-                Value in today's terms: <b>₹${(todayValue / 10000000).toFixed(2)} Cr</b>
-            </div>
-        `;
-        document.getElementById('fiText').innerText = `Target reached in ${yearsResult} years.`;
-
-
-    <div class="chart-container">
-        <canvas id="myWealthChart"></canvas>
+        <div id="fiText" style="margin-top:10px; font-size: 13px; color: #636e72;"></div>
     </div>
 
-    <p class="footer-note">Calculations are estimates. Data is saved anonymously for research.</p>
+    <div class="chart-container"><canvas id="myWealthChart"></canvas></div>
+    <p class="footer-note">Estimates only. Data saved anonymously for research.</p>
 </div>
 
 <script>
 let myChart = null;
-// REPLACE THIS URL WITH YOUR SHEETDB API URL
-const SHEETDB_URL = 'https://sheetdb.io/api/v1/lkvxw2aglx2u9';
+const SHEETDB_URL = 'https://sheetdb.io/api/v1/YOUR_API_ID'; // REPLACE THIS WITH YOUR ID
 
 async function saveData(payload) {
-    if(SHEETDB_URL.includes('YOUR_API_ID')) return; // Don't run if URL isn't set
+    if(SHEETDB_URL.includes('YOUR_API_ID')) return;
     try {
         await fetch(SHEETDB_URL, {
             method: 'POST',
@@ -109,12 +62,12 @@ async function saveData(payload) {
 
 function calculateWealth() {
     try {
-        // 1. Get Inputs
         const initial = parseFloat(document.getElementById('initial').value) || 0;
         const sip = parseFloat(document.getElementById('sip').value) || 0;
         const stepup = (parseFloat(document.getElementById('stepup').value) || 0) / 100;
         const returns = (parseFloat(document.getElementById('returns').value) || 0) / 100;
         const targetCr = (parseFloat(document.getElementById('target').value) || 0) * 10000000;
+        const inflation = (parseFloat(document.getElementById('inflation').value) || 0) / 100;
 
         let total = initial;
         let currentSip = sip;
@@ -122,11 +75,9 @@ function calculateWealth() {
         let labels = ["Start"];
         let dataPoints = [initial / 10000000];
 
-        // 2. Math Logic
-        while (total < targetCr && months < 480) { // Limit to 40 years
+        while (total < targetCr && months < 480) {
             months++;
             total = (total * (1 + (returns / 12))) + currentSip;
-            
             if (months % 12 === 0) {
                 currentSip *= (1 + stepup);
                 labels.push("Yr " + (months / 12));
@@ -134,13 +85,18 @@ function calculateWealth() {
             }
         }
 
-        // 3. UI Update
-        const yearsResult = (months / 12).toFixed(1);
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('corpusText').innerHTML = `Projected Wealth: <span class="highlight">₹${(total / 10000000).toFixed(2)} Cr</span>`;
-        document.getElementById('fiText').innerText = `Target reached in approximately ${yearsResult} years.`;
+        const years = (months / 12).toFixed(1);
+        const todayValue = total / Math.pow((1 + inflation), (months / 12));
 
-        // 4. Chart Update
+        // Update UI
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('corpusText').innerHTML = `
+            Projected Wealth: <span class="highlight">₹${(total / 10000000).toFixed(2)} Cr</span>
+            <div class="inflation-text">Today's Value: ₹${(todayValue / 10000000).toFixed(2)} Cr</div>
+        `;
+        document.getElementById('fiText').innerText = `Target reached in ${years} years.`;
+
+        // Update Chart
         if (myChart) myChart.destroy();
         const ctx = document.getElementById('myWealthChart').getContext('2d');
         myChart = new Chart(ctx, {
@@ -148,46 +104,27 @@ function calculateWealth() {
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Wealth (₹ Cr)',
+                    label: 'Wealth (Cr)',
                     data: dataPoints,
                     borderColor: '#27ae60',
                     backgroundColor: 'rgba(39, 174, 96, 0.1)',
                     fill: true,
-                    tension: 0.3,
-                    borderWidth: 3,
-                    pointRadius: 2
+                    tension: 0.3
                 }]
             },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { y: { ticks: { callback: v => '₹' + v + 'Cr' } } }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
         });
 
-        // 5. Save Data to Google Sheets
+        // Save Data
         saveData({
             timestamp: new Date().toLocaleString(),
-            initial, sip, stepup: stepup*100, returns: returns*100, target: targetCr/10000000, years: yearsResult
+            initial, sip, stepup: stepup*100, returns: returns*100, target: targetCr/10000000, years: years, today_value: (todayValue / 10000000).toFixed(2)
         });
 
     } catch (e) {
-        alert("Something went wrong. Please check your inputs.");
+        alert("Check your inputs!");
     }
 }
-        // 5. Save Data to Google Sheets
-        saveData({
-            timestamp: new Date().toLocaleString(),
-            initial, 
-            sip, 
-            stepup: stepup * 100, 
-            returns: returns * 100, 
-            target: targetCr / 10000000, 
-            years: yearsResult,
-            today_value: (todayValue / 10000000).toFixed(2) // New Column
-        });
-
 </script>
 </body>
 </html>
